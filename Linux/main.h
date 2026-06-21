@@ -47,6 +47,9 @@ class LinuxHost : public godot::TextEdit {
     godot::String input;
     godot::String history_temp;
     int32_t history_index{0};
+    Segment current;
+    godot::String cur_args;
+    ParseState parse_state = ParseState::Normal;
     godot::Vector2i input_start_line_col{0, 0};
     int MAX_LINES_PER_FRAME{50};
     int TOTAL_MAX_LINES{22560};
@@ -71,9 +74,11 @@ class LinuxHost : public godot::TextEdit {
 
 protected:
     static void _bind_methods();
+    void _notification(int p_what);
 
 public:
     void _ready() override;
+    void _exit_tree() override;
     void start_pseudoterminal();
     void end_pseudoterminal();
     void write_to_terminal(const godot::String &text);
